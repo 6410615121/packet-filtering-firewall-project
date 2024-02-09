@@ -28,7 +28,7 @@ public class MyRestController {
 
     @GetMapping("/api/createDevice")
     public String createDevice(@RequestParam(defaultValue = "127.0.0.1") String IP) {
-        Device device = new Device("127.0.0.1");
+        Device device = new Device(IP);
         devices.add(device);
         return "created a device using IP: " + device.getIPaddress() + "!";
     }
