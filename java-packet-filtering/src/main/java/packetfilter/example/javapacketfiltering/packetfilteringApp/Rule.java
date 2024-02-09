@@ -12,4 +12,21 @@ public class Rule {
         this.port = port;
         this.isAllow = isAllow;
     }
+
+    public String getSourceIP() {
+        return sourceIP;
+    }
+
+    public String getDestIP() {
+        return destIP;
+    }
+
+    public String getPort() {
+        return port;
+    }
+
+    public boolean isAllow() {
+        return isAllow;
+    }
+
 }
