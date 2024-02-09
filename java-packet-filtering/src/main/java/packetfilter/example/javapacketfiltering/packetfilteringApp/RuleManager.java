@@ -1,7 +1,6 @@
 package packetfilter.example.javapacketfiltering.packetfilteringapp;
 
 import java.util.ArrayList;
-import packetfilter.example.javapacketfiltering.packetfilteringapp.Rule;
 
 public class RuleManager {
     private ArrayList<Rule> rules;
