@@ -29,12 +29,16 @@ public class MyRestController {
     //
 
     @GetMapping("/api/createDevice")
-    public ResponseEntity<String> createDevice(@RequestParam(defaultValue = "1.1.1.1") String ip) {
-        for (int i = 0; i < devices.size(); i++) {
-            Device device = devices.get(i);
-            if (device.getIPaddress().equals(ip)) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("This IP already on some Device.");
+    public ResponseEntity<String> createDevice(@RequestParam(defaultValue = "") String ip) {
+        if (!ip.equals("")) {
+            for (int i = 0; i < devices.size(); i++) {
+                Device device = devices.get(i);
+                if (device.getIPaddress().equals(ip)) {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("This IP already on some Device.");
+                }
             }
+        } else {
+            ip = "192.168.1." + (devices.size() + 1);
         }
 
         Device device = new Device(ip);
