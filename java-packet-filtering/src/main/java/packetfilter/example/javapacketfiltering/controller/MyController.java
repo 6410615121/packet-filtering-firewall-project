@@ -11,4 +11,9 @@ public class MyController {
         model.addAttribute("message", "Hello, World!");
         return "test";
     }
+
+    @GetMapping("/")
+    public String index(Model model) {
+        return "deviceManager";
+    }
 }
