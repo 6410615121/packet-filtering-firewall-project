@@ -15,6 +15,7 @@ import packetfilter.example.javapacketfiltering.packetfilteringapp.Device;
 public class MyRestController {
     private ArrayList<Device> devices = new ArrayList<Device>();
 
+    // template for copy-paste
     @GetMapping("/hello")
     public String sayHello(@RequestParam(defaultValue = "World") String name) {
         return "Hello, " + name + "!";
@@ -25,17 +26,38 @@ public class MyRestController {
         String responseBody = "{\"message\": \"Example response\"}";
         return ResponseEntity.status(HttpStatus.OK).body(responseBody);
     }
+    //
 
     @GetMapping("/api/createDevice")
-    public String createDevice(@RequestParam(defaultValue = "127.0.0.1") String IP) {
-        Device device = new Device(IP);
+    public ResponseEntity<String> createDevice(@RequestParam(defaultValue = "1.1.1.1") String ip) {
+        for (int i = 0; i < devices.size(); i++) {
+            Device device = devices.get(i);
+            if (device.getIPaddress().equals(ip)) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("This IP already on some Device.");
+            }
+        }
+
+        Device device = new Device(ip);
         devices.add(device);
-        return "created a device using IP: " + device.getIPaddress() + "!";
+
+        String responseBody = "created a device using IP: " + device.getIPaddress() + "!";
+        return ResponseEntity.status(HttpStatus.OK).body(responseBody);
     }
 
     @GetMapping("/api/getAllDevices")
     public ResponseEntity<ArrayList<Device>> getAllDevices() {
         return ResponseEntity.status(HttpStatus.OK).body(devices);
+    }
+
+    @GetMapping("/api/getDevice")
+    public ResponseEntity<Device> getAllDevices(@RequestParam String ip) {
+        for (int i = 0; i < devices.size(); i++) {
+            Device device = devices.get(i);
+            if (device.getIPaddress().equals(ip)) {
+                return ResponseEntity.status(HttpStatus.OK).body(device);
+            }
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
     }
 
 }
