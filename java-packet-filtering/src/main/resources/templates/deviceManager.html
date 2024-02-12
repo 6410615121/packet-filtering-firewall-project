@@ -3,10 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>index</title>
-    <link rel="stylesheet" href="/navbar.css">
 </head>
 <body>
     <div th:insert="~{navbar}"></div>
+    <form action="/createDevice" method="get">
+        <button>add more device</button>
+    </form>
+    
+
     <div th:each="device: ${devices}">
         <div th:text="${device.IPaddress}">test</div>
     </div>

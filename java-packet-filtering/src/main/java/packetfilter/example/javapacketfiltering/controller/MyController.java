@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import packetfilter.example.javapacketfiltering.packetfilteringapp.Device;
 
@@ -30,5 +31,11 @@ public class MyController {
         ArrayList<Device> devices = myRestController.getAllDevices().getBody();
         model.addAttribute("devices", devices);
         return "deviceManager";
+    }
+
+    @GetMapping("/createDevice")
+    public String createDevice(Model model, @RequestParam(defaultValue = "") String ip) {
+        myRestController.createDevice(ip);
+        return index(model);
     }
 }
