@@ -54,7 +54,7 @@ public class MyRestController {
     }
 
     @GetMapping("/api/getDevice")
-    public ResponseEntity<Device> getAllDevices(@RequestParam String ip) {
+    public ResponseEntity<Device> getDevice(@RequestParam String ip) {
         for (int i = 0; i < devices.size(); i++) {
             Device device = devices.get(i);
             if (device.getIPaddress().equals(ip)) {
