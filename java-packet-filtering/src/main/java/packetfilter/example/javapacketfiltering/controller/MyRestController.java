@@ -28,35 +28,48 @@ public class MyRestController {
     }
     //
 
+    // api for create device using ip as primary key
     @GetMapping("/api/createDevice")
     public ResponseEntity<String> createDevice(@RequestParam(defaultValue = "") String ip) {
         if (!ip.equals("")) {
+            // check that ip user provided is unique.
             for (int i = 0; i < devices.size(); i++) {
                 Device device = devices.get(i);
+
+                // found ip on some device
                 if (device.getIPaddress().equals(ip)) {
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("This IP already on some Device.");
                 }
             }
         } else {
+            // if user doesnt provide any ip, just gen it based on devices array list size
             ip = "192.168.1." + (devices.size() + 1);
         }
 
+        // create device and add into arraylist
         Device device = new Device(ip);
         devices.add(device);
 
+        // create text that will be showed on api endpoint
         String responseBody = "created a device using IP: " + device.getIPaddress() + "!";
         return ResponseEntity.status(HttpStatus.OK).body(responseBody);
     }
 
+    // api for getting all devices
     @GetMapping("/api/getAllDevices")
     public ResponseEntity<ArrayList<Device>> getAllDevices() {
         return ResponseEntity.status(HttpStatus.OK).body(devices);
     }
 
+    // api for getting a device using ip
     @GetMapping("/api/getDevice")
     public ResponseEntity<Device> getDevice(@RequestParam String ip) {
+
+        // iterate into device arraylist
         for (int i = 0; i < devices.size(); i++) {
             Device device = devices.get(i);
+
+            // found it
             if (device.getIPaddress().equals(ip)) {
                 return ResponseEntity.status(HttpStatus.OK).body(device);
             }
