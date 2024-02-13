@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -70,5 +71,41 @@ public class MyController {
         }
 
         return "redirect:/device?ip=" + ip;
+    }
+
+    @PostMapping("/device/sendpacket")
+    public String sendPacket(RedirectAttributes redirectAttributes, @RequestParam String sourceIP,
+            @RequestParam String destIP,
+            @RequestParam String port) {
+        Device sourceDevice = myRestController.getDevice(sourceIP).getBody();
+        Device destDevice = myRestController.getDevice(destIP).getBody();
+
+        Firewall sourceDeviceFirewall = sourceDevice.getFirewall();
+        Firewall DestDeviceFirewall = null;
+
+        redirectAttributes.addFlashAttribute("sent", true);
+
+        boolean sendResultSource = sourceDeviceFirewall.isAllowPacket(sourceIP, destIP, port);
+        if (sourceDeviceFirewall.isActive()) {
+            redirectAttributes.addFlashAttribute("sendResultSource", sendResultSource);
+        } else {
+            redirectAttributes.addFlashAttribute("sendResultSource", true);
+        }
+
+        if (destDevice == null) {
+            redirectAttributes.addFlashAttribute("sendResultDest", false);
+        } else {
+            DestDeviceFirewall = destDevice.getFirewall();
+
+            if (DestDeviceFirewall.isActive()) {
+                boolean sendResultDest = sourceDeviceFirewall.isAllowPacket(sourceIP, destIP, port);
+                redirectAttributes.addFlashAttribute("sendResultDest", sendResultDest);
+            } else {
+                redirectAttributes.addFlashAttribute("sendResultDest", true);
+            }
+
+        }
+
+        return "redirect:/device?ip=" + sourceIP;
     }
 }

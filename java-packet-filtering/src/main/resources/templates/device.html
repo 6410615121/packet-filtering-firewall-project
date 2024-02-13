@@ -14,6 +14,21 @@
         <input type="hidden" name="ip" th:value="${device.IPaddress}" />
         <button>Toggle Firewall</button>
     </form>
+
+    <br>
+    <form action="/device/sendpacket" method="post">
+        <input type="hidden" name="sourceIP" th:value="${device.IPaddress}">
+        <input type="text" name="destIP" placeholder="input destination IP">
+        <input type="text" name="port" placeholder="input port">
+        <button>send packet</button>
+    </form>
+
+    <div th:if="${sent}">
+        <p>Source: <span th:text="${sendResultSource ? 'Success' : 'Failed'}"></span></p>
+        <p>Destination: <span th:text="${sendResultDest ? 'Success' : 'Failed'}"></span></p>
+    </div>
+
+    
     
     
     

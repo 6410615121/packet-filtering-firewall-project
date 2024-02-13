@@ -48,7 +48,7 @@ public class Firewall {
             }
 
         }
-        return false;
+        return true;
     }
 
 }
