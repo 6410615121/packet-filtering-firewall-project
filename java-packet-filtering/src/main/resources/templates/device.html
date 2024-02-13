@@ -24,8 +24,8 @@
     </form>
 
     <div th:if="${sent}">
-        <p>Source: <span th:text="${sendResultSource ? 'Success' : 'Failed'}"></span></p>
-        <p>Destination: <span th:text="${sendResultDest ? 'Success' : 'Failed'}"></span></p>
+        <p>Source Firewall: <span th:text="${sendResultSource ? 'Success' : 'Failed'}"></span></p>
+        <p>Destination Firewall: <span th:text="${sendResultDest ? 'Success' : 'Failed'}"></span></p>
     </div>
 
     
