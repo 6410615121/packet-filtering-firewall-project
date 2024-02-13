@@ -1,18 +1,36 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>index</title>
-</head>
-<body>
-    <div th:insert="~{navbar}"></div>
-    <form action="/createDevice" method="get">
-        <button>add more device</button>
-    </form>
-    
+    <link rel="stylesheet" href="/deviceManager.css" />
+  </head>
+  <body>
+    <header><div th:insert="~{navbar}"></div></header>
 
-    <div th:each="device: ${devices}">
-        <a th:href="@{/device(ip=${device.IPaddress})}" th:text="${device.IPaddress}">test</a>
-    </div>
-</body>
+    <main>
+      <form action="/createDevice" method="get">
+        <button>add more device</button>
+      </form>
+
+      <table>
+        <tr>
+          <th id="device-header">device</th>
+          <th id="firewall-header">Firewall status</th>
+        </tr>
+        <div th:each="device: ${devices}">
+          <tr>
+            <td>
+              <a
+                th:href="@{/device(ip=${device.IPaddress})}"
+                th:text="${device.IPaddress}"
+                >test</a
+              >
+            </td>
+            <td>status</td>
+          </tr>
+        </div>
+      </table>
+    </main>
+  </body>
 </html>

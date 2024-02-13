@@ -1,0 +1,21 @@
+main{
+    display: flex;
+    padding: 1em;
+    flex-direction: column;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+th, tr, td{
+    border: 1px solid black;
+}
+
+td{
+    text-align: center;
+}
+
+th#firewall-header{
+    width: 70%;
+}
