@@ -8,5 +8,17 @@
 <body>
     <div th:insert="~{navbar}"></div>
     <p th:text=${device.IPaddress}>test</p>
+    Firewall Status: <label th:text="${device.firewall.isActive} ? 'ON' : 'OFF'"></label>
+
+    <form action="/device/togglefirewall/" method="post">
+        <input type="hidden" name="ip" th:value="${device.IPaddress}" />
+        <button>Toggle Firewall</button>
+    </form>
+    
+    
+    
+    
+    
+    
 </body>
 </html>

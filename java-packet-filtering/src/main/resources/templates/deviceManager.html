@@ -27,7 +27,7 @@
                 >test</a
               >
             </td>
-            <td>status</td>
+            <td th:text="${device.firewall.isActive} ? 'ON' : 'OFF'">status</td>
           </tr>
         </div>
       </table>
