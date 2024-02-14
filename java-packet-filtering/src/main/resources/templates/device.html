@@ -16,8 +16,30 @@
     </form>
 
     <br>
+    <!-- displaying rules in rule manager -->
+    Rules list
+    <table>
+        <tr>
+          <th id="sourceIP-header">Source IP</th>
+          <th id="destIP-header">Destination IP</th>
+          <th id="port-header">Port number</th>
+          <th id="isAllow-header">Is allow?</th>
+        </tr>
+        <div th:each="rule: ${device.getFirewall().getRuleManager().getRules()}">
+            <tr>
+                <td th:text="${rule.getSourceIP()}"></td>
+                <td th:text="${rule.getDestIP()}"></td>
+                <td th:text="${rule.getPort()}"></td>
+                <!-- <td th:text="${rule.isAllow() ? 'Yes' : 'No'}"></td> -->
+                <td th:text="${rule.isAllow()}"></td>
+            </tr>
+        </div>
+    </table>
+
+    <br>
     <form action="/device/createrule" method="post">
         <input type="hidden" name="sourceIP" th:value="${device.IPaddress}">
+        <input type="text" name="ruleSourceIP" placeholder="input source IP">
         <input type="text" name="destIP" placeholder="input destination IP">
         <input type="text" name="port" placeholder="input port">
         <input type="radio" name="isAllow" value=True checked>Allow</input>

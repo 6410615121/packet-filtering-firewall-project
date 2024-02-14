@@ -38,10 +38,22 @@ public class Firewall {
             String ruleDestIP = rule.getDestIP();
             String rulePort = rule.getPort();
 
+            //for testing
+            System.out.println(sourceIP == "192.168.1.1");
+            System.out.println(sourceIP + ", " + destIP + ", " + port);
+            System.out.println(ruleSourceIP + ", " + ruleDestIP + ", " + rulePort + ", " + Boolean.toString(rule.isAllow()));
+
+            // cannot compare the value of two string with ==
+            // // equalling -1 means any
+            // boolean cond1 = (sourceIP == ruleSourceIP) || (ruleSourceIP.equals("-1")); // sourceIP
+            // boolean cond2 = (destIP == rule.getDestIP()) || (ruleDestIP.equals("-1")); // destIP
+            // boolean cond3 = (port == rulePort) || (rulePort.equals("-1")); // port
+
+            // use .equals() instead of ==
             // equalling -1 means any
-            boolean cond1 = (sourceIP == ruleSourceIP) || (ruleSourceIP.equals("-1")); // sourceIP
-            boolean cond2 = (destIP == rule.getDestIP()) || (ruleDestIP.equals("-1")); // destIP
-            boolean cond3 = (port == rulePort) || (rulePort.equals("-1")); // port
+            boolean cond1 = (sourceIP.equals(ruleSourceIP)) || (ruleSourceIP.equals("-1")); // sourceIP
+            boolean cond2 = (destIP.equals(rule.getDestIP())) || (ruleDestIP.equals("-1")); // destIP
+            boolean cond3 = (port.equals(rulePort)) || (rulePort.equals("-1")); // port
 
             if (cond1 && cond2 && cond3) {
                 return rule.isAllow();

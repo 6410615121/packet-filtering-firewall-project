@@ -16,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 
 import packetfilter.example.javapacketfiltering.packetfilteringapp.Device;
 import packetfilter.example.javapacketfiltering.packetfilteringapp.Firewall;
+import packetfilter.example.javapacketfiltering.packetfilteringapp.RuleManager;
+import packetfilter.example.javapacketfiltering.packetfilteringapp.Rule;
 
 @Controller
 public class MyController {
@@ -108,6 +110,11 @@ public class MyController {
             @RequestParam String destIP,
             @RequestParam String port) {
 
+        //for testing
+        System.out.println(sourceIP);
+        System.out.println(sourceIP.toString() == "192.168.1.1");
+        System.out.println("===");
+
         // get Device using information from form user provided
         Device sourceDevice = myRestController.getDevice(sourceIP).getBody();
         Device destDevice = myRestController.getDevice(destIP).getBody();
@@ -157,9 +164,25 @@ public class MyController {
     // Post method to createrule, it require sourceIP, destIP, port, and isAllow
     @PostMapping("/device/createrule")
     public String createRule(RedirectAttributes redirectAttributes, @RequestParam String sourceIP,
+            @RequestParam String ruleSourceIP,
             @RequestParam String destIP,
             @RequestParam String port,
             @RequestParam Boolean isAllow) {
+                // get Device using information from the form that user provided
+                Device sourceDevice = myRestController.getDevice(sourceIP).getBody();
+
+                // get Firewall from device
+                Firewall sourceDeviceFirewall = sourceDevice.getFirewall();
+                
+                // get Rule manager from firewall
+                RuleManager sourceDeviceRuleManager = sourceDeviceFirewall.getRuleManager();
+                
+                // create new rule using information from the form that user provided
+                Rule newRule = new Rule(ruleSourceIP, destIP, port, isAllow);
+                
+                // add the created rule to the rule manager 
+                sourceDeviceRuleManager.addRule(newRule);
+
                 // attribute 'created' is set to true to indicate to template that a rule has been created
                 redirectAttributes.addFlashAttribute("created", true);
 
