@@ -153,4 +153,18 @@ public class MyController {
 
         return "redirect:/device?ip=" + sourceIP;
     }
+
+    // Post method to createrule, it require sourceIP, destIP, port, and isAllow
+    @PostMapping("/device/createrule")
+    public String createRule(RedirectAttributes redirectAttributes, @RequestParam String sourceIP,
+            @RequestParam String destIP,
+            @RequestParam String port,
+            @RequestParam Boolean isAllow) {
+                // attribute 'created' is set to true to indicate to template that a rule has been created
+                redirectAttributes.addFlashAttribute("created", true);
+
+                //just for testing
+                redirectAttributes.addFlashAttribute("allow", isAllow);
+                return "redirect:/device?ip=" + sourceIP;
+            }
 }

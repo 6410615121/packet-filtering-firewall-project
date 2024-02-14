@@ -16,6 +16,16 @@
     </form>
 
     <br>
+    <form action="/device/createrule" method="post">
+        <input type="hidden" name="sourceIP" th:value="${device.IPaddress}">
+        <input type="text" name="destIP" placeholder="input destination IP">
+        <input type="text" name="port" placeholder="input port">
+        <input type="radio" name="isAllow" value=True checked>Allow</input>
+        <input type="radio" name="isAllow" value=False>Not allow</input>
+        <button>create firewall rule</button>
+    </form>
+
+    <br>
     <form action="/device/sendpacket" method="post">
         <input type="hidden" name="sourceIP" th:value="${device.IPaddress}">
         <input type="text" name="destIP" placeholder="input destination IP">
@@ -28,6 +38,12 @@
         <p>Destination Firewall: <span th:text="${sendResultDest ? 'Success' : 'Failed'}"></span></p>
     </div>
 
+    <!-- for testing createRule and stuff -->
+    <div th:if="${created}">
+        <!-- <p th:text="${allow ? 'allow' : 'not allow'}"></p> -->
+        <p th:text="${allow}"></p>
+        ahhh
+    </div>
     
     
     
