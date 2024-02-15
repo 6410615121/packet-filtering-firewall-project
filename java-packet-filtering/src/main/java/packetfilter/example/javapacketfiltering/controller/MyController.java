@@ -112,7 +112,7 @@ public class MyController {
 
         //for testing
         System.out.println(sourceIP);
-        System.out.println(sourceIP.toString() == "192.168.1.1");
+        //System.out.println(sourceIP.toString() == "192.168.1.1");
         System.out.println("===");
 
         // get Device using information from form user provided
@@ -150,7 +150,8 @@ public class MyController {
             DestDeviceFirewall = destDevice.getFirewall();
 
             if (DestDeviceFirewall.isActive()) {
-                boolean sendResultDest = sourceDeviceFirewall.isAllowPacket(sourceIP, destIP, port);
+                //boolean sendResultDest = sourceDeviceFirewall.isAllowPacket(sourceIP, destIP, port);
+                boolean sendResultDest = DestDeviceFirewall.isAllowPacket(sourceIP, destIP, port);
                 redirectAttributes.addFlashAttribute("sendResultDest", sendResultDest);
             } else {
                 redirectAttributes.addFlashAttribute("sendResultDest", true);
