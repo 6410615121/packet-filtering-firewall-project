@@ -38,11 +38,6 @@ public class Firewall {
             String ruleDestIP = rule.getDestIP();
             String rulePort = rule.getPort();
 
-            //for testing
-            System.out.println(sourceIP == "192.168.1.1");
-            System.out.println(sourceIP + ", " + destIP + ", " + port);
-            System.out.println(ruleSourceIP + ", " + ruleDestIP + ", " + rulePort + ", " + Boolean.toString(rule.isAllow()));
-
             // cannot compare the value of two string with ==
             // // equalling -1 means any
             // boolean cond1 = (sourceIP == ruleSourceIP) || (ruleSourceIP.equals("-1")); // sourceIP
