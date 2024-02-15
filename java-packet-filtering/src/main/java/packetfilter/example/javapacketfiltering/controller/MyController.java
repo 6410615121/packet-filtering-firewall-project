@@ -110,11 +110,6 @@ public class MyController {
             @RequestParam String destIP,
             @RequestParam String port) {
 
-        //for testing
-        System.out.println(sourceIP);
-        //System.out.println(sourceIP.toString() == "192.168.1.1");
-        System.out.println("===");
-
         // get Device using information from form user provided
         Device sourceDevice = myRestController.getDevice(sourceIP).getBody();
         Device destDevice = myRestController.getDevice(destIP).getBody();
@@ -184,11 +179,28 @@ public class MyController {
                 // add the created rule to the rule manager 
                 sourceDeviceRuleManager.addRule(newRule);
 
-                // attribute 'created' is set to true to indicate to template that a rule has been created
-                redirectAttributes.addFlashAttribute("created", true);
-
-                //just for testing
-                redirectAttributes.addFlashAttribute("allow", isAllow);
                 return "redirect:/device?ip=" + sourceIP;
+            }
+
+            @PostMapping("/device/deleterule")
+    public String deleteRule(RedirectAttributes redirectAttributes, @RequestParam String ip,
+            @RequestParam int ruleIndex) {
+                System.out.println(ruleIndex);
+                // get Device using information from the form that user provided
+                Device sourceDevice = myRestController.getDevice(ip).getBody();
+
+                // get Firewall from device
+                Firewall sourceDeviceFirewall = sourceDevice.getFirewall();
+                
+                // get Rule manager from firewall
+                RuleManager sourceDeviceRuleManager = sourceDeviceFirewall.getRuleManager();
+                
+                // get the rule chosen by user from the rule manager
+                Rule targetRule = sourceDeviceRuleManager.getRules().get(ruleIndex);
+
+                // delete the chosen rule from the rule manager 
+                sourceDeviceRuleManager.removeRule(targetRule);
+
+                return "redirect:/device?ip=" + ip;
             }
 }

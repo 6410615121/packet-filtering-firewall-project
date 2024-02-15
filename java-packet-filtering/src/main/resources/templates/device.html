@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>device</title>
+    <link rel="stylesheet" href="/device.css" />
 </head>
 <body>
     <div th:insert="~{navbar}"></div>
@@ -17,24 +18,37 @@
 
     <br>
     <!-- displaying rules in rule manager -->
-    Rules list
-    <table>
-        <tr>
-          <th id="sourceIP-header">Source IP</th>
-          <th id="destIP-header">Destination IP</th>
-          <th id="port-header">Port number</th>
-          <th id="isAllow-header">Is allow?</th>
-        </tr>
-        <div th:each="rule: ${device.getFirewall().getRuleManager().getRules()}">
+    <div th:if="${device.getFirewall().getRuleManager().getRules().size()}">
+        Rules list
+        <table>
             <tr>
-                <td th:text="${rule.getSourceIP()}"></td>
-                <td th:text="${rule.getDestIP()}"></td>
-                <td th:text="${rule.getPort()}"></td>
-                <!-- <td th:text="${rule.isAllow() ? 'Yes' : 'No'}"></td> -->
-                <td th:text="${rule.isAllow()}"></td>
+            <th id="sourceIP-header">Source IP</th>
+            <th id="destIP-header">Destination IP</th>
+            <th id="port-header">Port number</th>
+            <th id="isAllow-header">Is allow?</th>
+            <th>Delete</th>
             </tr>
-        </div>
-    </table>
+            <div th:each="rule, status: ${device.getFirewall().getRuleManager().getRules()}">
+                <tr>
+                    <td th:text="${rule.getSourceIP()}"></td>
+                    <td th:text="${rule.getDestIP()}"></td>
+                    <td th:text="${rule.getPort()}"></td>
+                    <td th:text="${rule.isAllow() ? 'Yes' : 'No'}"></td>
+                    <td>
+                        <form action="/device/deleterule" method="post">
+                            <input type="hidden" name="ip" th:value="${device.IPaddress}" />
+                            <input type="hidden" name="ruleIndex" th:value=${status.index} />
+                            <button>Delete rule</button>
+                        </form>
+                    </td>
+                </tr>
+            </div>
+        </table>
+    </div>
+    <!-- if rule manager has no rule -->
+    <div th:unless="${device.getFirewall().getRuleManager().getRules().size()}">
+        <p> This firewall is empty</p>
+    </div>
 
     <br>
     <form action="/device/createrule" method="post">
@@ -44,7 +58,7 @@
         <input type="text" name="port" placeholder="input port">
         <input type="radio" name="isAllow" value=True checked>Allow</input>
         <input type="radio" name="isAllow" value=False>Not allow</input>
-        <button>create firewall rule</button>
+        <button>Create firewall rule</button>
     </form>
 
     <br>
@@ -52,7 +66,7 @@
         <input type="hidden" name="sourceIP" th:value="${device.IPaddress}">
         <input type="text" name="destIP" placeholder="input destination IP">
         <input type="text" name="port" placeholder="input port">
-        <button>send packet</button>
+        <button>Send packet</button>
     </form>
 
     <div th:if="${sent}">
@@ -60,12 +74,6 @@
         <p>Destination Firewall: <span th:text="${sendResultDest ? 'Success' : 'Failed'}"></span></p>
     </div>
 
-    <!-- for testing createRule and stuff -->
-    <div th:if="${created}">
-        <!-- <p th:text="${allow ? 'allow' : 'not allow'}"></p> -->
-        <p th:text="${allow}"></p>
-        ahhh
-    </div>
     
     
     
