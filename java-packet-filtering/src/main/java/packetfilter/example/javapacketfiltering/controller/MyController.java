@@ -16,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 
 import packetfilter.example.javapacketfiltering.packetfilteringapp.Device;
 import packetfilter.example.javapacketfiltering.packetfilteringapp.Firewall;
+import packetfilter.example.javapacketfiltering.packetfilteringapp.RuleManager;
+import packetfilter.example.javapacketfiltering.packetfilteringapp.Rule;
 
 @Controller
 public class MyController {
@@ -143,7 +145,8 @@ public class MyController {
             DestDeviceFirewall = destDevice.getFirewall();
 
             if (DestDeviceFirewall.isActive()) {
-                boolean sendResultDest = sourceDeviceFirewall.isAllowPacket(sourceIP, destIP, port);
+                //boolean sendResultDest = sourceDeviceFirewall.isAllowPacket(sourceIP, destIP, port);
+                boolean sendResultDest = DestDeviceFirewall.isAllowPacket(sourceIP, destIP, port);
                 redirectAttributes.addFlashAttribute("sendResultDest", sendResultDest);
             } else {
                 redirectAttributes.addFlashAttribute("sendResultDest", true);
@@ -153,4 +156,51 @@ public class MyController {
 
         return "redirect:/device?ip=" + sourceIP;
     }
+
+    // Post method to createrule, it require sourceIP, destIP, port, and isAllow
+    @PostMapping("/device/createrule")
+    public String createRule(RedirectAttributes redirectAttributes, @RequestParam String sourceIP,
+            @RequestParam String ruleSourceIP,
+            @RequestParam String destIP,
+            @RequestParam String port,
+            @RequestParam Boolean isAllow) {
+                // get Device using information from the form that user provided
+                Device sourceDevice = myRestController.getDevice(sourceIP).getBody();
+
+                // get Firewall from device
+                Firewall sourceDeviceFirewall = sourceDevice.getFirewall();
+                
+                // get Rule manager from firewall
+                RuleManager sourceDeviceRuleManager = sourceDeviceFirewall.getRuleManager();
+                
+                // create new rule using information from the form that user provided
+                Rule newRule = new Rule(ruleSourceIP, destIP, port, isAllow);
+                
+                // add the created rule to the rule manager 
+                sourceDeviceRuleManager.addRule(newRule);
+
+                return "redirect:/device?ip=" + sourceIP;
+            }
+
+            @PostMapping("/device/deleterule")
+    public String deleteRule(RedirectAttributes redirectAttributes, @RequestParam String ip,
+            @RequestParam int ruleIndex) {
+                System.out.println(ruleIndex);
+                // get Device using information from the form that user provided
+                Device sourceDevice = myRestController.getDevice(ip).getBody();
+
+                // get Firewall from device
+                Firewall sourceDeviceFirewall = sourceDevice.getFirewall();
+                
+                // get Rule manager from firewall
+                RuleManager sourceDeviceRuleManager = sourceDeviceFirewall.getRuleManager();
+                
+                // get the rule chosen by user from the rule manager
+                Rule targetRule = sourceDeviceRuleManager.getRules().get(ruleIndex);
+
+                // delete the chosen rule from the rule manager 
+                sourceDeviceRuleManager.removeRule(targetRule);
+
+                return "redirect:/device?ip=" + ip;
+            }
 }
