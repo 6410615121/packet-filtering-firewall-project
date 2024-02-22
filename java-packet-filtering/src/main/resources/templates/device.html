@@ -8,7 +8,9 @@
 </head>
 <body>
     <div th:insert="~{navbar}"></div>
-    <p th:text=${device.IPaddress}>test</p>
+    
+    <div class='content'>
+        <p th:text=${device.IPaddress}>test</p>
     Firewall Status: <label th:text="${device.firewall.isActive} ? 'ON' : 'OFF'"></label>
 
     <form action="/device/togglefirewall/" method="post">
@@ -73,6 +75,8 @@
         <p>Source Firewall: <span th:text="${sendResultSource ? 'Success' : 'Failed'}"></span></p>
         <p>Destination Firewall: <span th:text="${sendResultDest ? 'Success' : 'Failed'}"></span></p>
     </div>
+    </div>
+    
 
     
     

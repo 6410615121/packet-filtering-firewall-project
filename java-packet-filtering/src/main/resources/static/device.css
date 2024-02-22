@@ -5,3 +5,7 @@ table {
 th, tr, td{
     border: 1px solid black;
 }
+
+div.content{
+    padding: 0.5em 1em;
+}
